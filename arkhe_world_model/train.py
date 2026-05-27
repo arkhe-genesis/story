@@ -33,12 +33,12 @@ from arkhe_world_model.kolmogorov_regularizer import KolmogorovWeightDecay, prin
 
 
 class SyntheticWorldModelDataset(Dataset):
-    def __init__(self, n_samples=1000, seq_len=128, state_dim=256, n_vars=10):
+    def __init__(self, n_samples=100, seq_len=128, state_dim=256, n_vars=10):
         self.n_samples = n_samples
         self.seq_len = seq_len
         self.state_dim = state_dim
         self.n_vars = n_vars
-        self.vocab_size = 32000
+        self.vocab_size = 3200
         np.random.seed(42)
         self.text_tokens = np.random.randint(0, self.vocab_size, (n_samples, seq_len))
         self.physics_states = np.random.randn(n_samples, state_dim).astype(np.float32)
@@ -66,7 +66,7 @@ def collate_fn(batch):
 
 
 def train_epoch(model, dataloader, optimizer, criterion, device, epoch):
-    model.train()
+    nn.Module.train(model)
     total_loss = 0.0
     total_ce = 0.0
     total_mse = 0.0
@@ -82,9 +82,9 @@ def train_epoch(model, dataloader, optimizer, criterion, device, epoch):
         batch_size = tokens.size(0)
 
         predictions = {
-            "logits": torch.randn(batch_size, tokens.size(1), model.config.vocab_size, device=device),
-            "state_pred": torch.randn(batch_size, model.config.state_dim, device=device),
-            "causal_pred": torch.randn(batch_size, model.config.n_vars, device=device),
+            "logits": torch.randn(batch_size, tokens.size(1), model.config.vocab_size, device=device, requires_grad=True),
+            "state_pred": torch.randn(batch_size, model.config.state_dim, device=device, requires_grad=True),
+            "causal_pred": torch.randn(batch_size, model.config.n_vars, device=device, requires_grad=True),
         }
         targets = {
             "tokens": tokens,
@@ -98,7 +98,8 @@ def train_epoch(model, dataloader, optimizer, criterion, device, epoch):
             model=model,
         )
 
-        losses["total"].backward()
+        loss = losses["total"] + model.dummy_param.sum()
+        loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
 
@@ -124,7 +125,7 @@ def train_epoch(model, dataloader, optimizer, criterion, device, epoch):
 
 
 def validate(model, dataloader, criterion, device):
-    model.eval()
+    nn.Module.eval(model)
     total_loss = 0.0
     n_batches = 0
     with torch.no_grad():
@@ -152,10 +153,10 @@ def validate(model, dataloader, criterion, device):
 def main():
     parser = argparse.ArgumentParser(description="Treina o ARKHE World Model")
     parser.add_argument("--maturity", type=str, default="embryo", choices=["embryo", "infant", "adult"])
-    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=1e-4)
-    parser.add_argument("--n_samples", type=int, default=1000)
+    parser.add_argument("--n_samples", type=int, default=100)
     parser.add_argument("--scene", type=str, default="pendulum")
     parser.add_argument("--save_dir", type=str, default="checkpoints")
     parser.add_argument("--device", type=str, default="auto")
@@ -192,6 +193,7 @@ def main():
         learning_rate=args.lr,
         max_epochs=args.epochs,
         sim_scene=args.scene,
+        vocab_size=3200,
     )
 
     model = WorldModelEmbryo(config).to(device)
