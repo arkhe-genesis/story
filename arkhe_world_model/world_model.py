@@ -88,6 +88,9 @@ class WorldModelEmbryo(nn.Module):
         self.maturity = self.config.maturity
         self.active_stages = self._get_active_stages()
 
+        # dummy param para o Adam e model.parameters()
+        self.dummy_param = nn.Parameter(torch.empty(0, requires_grad=True))
+
         # Módulos (lazy initialization)
         self._llm_engine = None
         self._physics_priors = None
@@ -216,7 +219,7 @@ class WorldModelEmbryo(nn.Module):
 
         # Stage 2: Physics Priors
         if DevelopmentStage.PHYSICS_PRIORS in self.active_stages:
-            physics_emb = self.physics_priors(llm_emb)
+            physics_emb = self.physics_priors(torch.from_numpy(llm_emb))
             outputs["stage2"] = {
                 "physics_embedding": physics_emb,
             }
@@ -267,7 +270,7 @@ class WorldModelEmbryo(nn.Module):
 
     # ── Training ───────────────────────────────────────────────
 
-    def train(
+    def fit(
         self,
         data_loader,
         epochs: Optional[int] = None,

@@ -56,27 +56,27 @@ class PhysicsPriorsModule(nn.Module):
             "gravity": nn.Sequential(
                 nn.Linear(d_model, hidden_dim),
                 nn.ReLU(),
-                nn.Linear(hidden_dim, state_dim // n_priors),
+                nn.Linear(hidden_dim, int(state_dim / n_priors)),
             ),
             "collision": nn.Sequential(
                 nn.Linear(d_model, hidden_dim),
                 nn.ReLU(),
-                nn.Linear(hidden_dim, state_dim // n_priors),
+                nn.Linear(hidden_dim, int(state_dim / n_priors)),
             ),
             "occlusion": nn.Sequential(
                 nn.Linear(d_model, hidden_dim),
                 nn.ReLU(),
-                nn.Linear(hidden_dim, state_dim // n_priors),
+                nn.Linear(hidden_dim, int(state_dim / n_priors)),
             ),
             "conservation": nn.Sequential(
                 nn.Linear(d_model, hidden_dim),
                 nn.ReLU(),
-                nn.Linear(hidden_dim, state_dim // n_priors),
+                nn.Linear(hidden_dim, int(state_dim / n_priors)),
             ),
             "continuity": nn.Sequential(
                 nn.Linear(d_model, hidden_dim),
                 nn.ReLU(),
-                nn.Linear(hidden_dim, state_dim // n_priors),
+                nn.Linear(hidden_dim, int(state_dim / n_priors)),
             ),
         })
 
@@ -134,6 +134,8 @@ class PhysicsPriorsModule(nn.Module):
             gated_priors.append(w * block)
 
         gated_output = torch.cat(gated_priors, dim=-1)
+        if gated_output.shape[-1] < self.state_dim:
+            gated_output = F.pad(gated_output, (0, self.state_dim - gated_output.shape[-1]))
 
         # Projeção final
         physics_embedding = self.output_proj(gated_output)

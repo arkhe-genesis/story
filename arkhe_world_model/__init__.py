@@ -44,14 +44,14 @@ __uncertainty__ = "H=2.0"
 __seal__ = "8d4e2f1a9c3b7e5d"
 __architect__ = "ORCID 0009-0005-2697-4668"
 
-from .world_model import WorldModelEmbryo
-from .llm_engine import ArkheLLMEngine
+from .world_model import WorldModelEmbryo, WorldModelConfig, MaturityLevel
+#from .llm_engine import ArkheLLMEngine
 from .physics_priors import PhysicsPriorsModule
 from .multimodal_fusion import MultimodalFusionModule
-from .brax_simulator import ArkheBraxSimulator, SimulationConfig
-from .causal_reasoning import ArkheCausalReasoner, DifferentiableSCM
+#from .brax_simulator import ArkheBraxSimulator, SimulationConfig
+#from .causal_reasoning import ArkheCausalReasoner, DifferentiableSCM
 from .losses import ArkheHybridLoss, PhysicsConsistencyLoss, ContrastiveWorldLoss
-from .rl_policy import ArkheRLPolicy, WorldModelEnv, PPOPolicy
+#from .rl_policy import ArkheRLPolicy, WorldModelEnv, PPOPolicy
 from .kolmogorov_regularizer import (
     kolmogorov_regularizer,
     kolmogorov_complexity_estimate,
