@@ -1,7 +1,0 @@
-{
-  "name": "arkhe-test",
-  "version": "1.0.0",
-  "scripts": {
-    "test": "echo 'success'"
-  }
-}
