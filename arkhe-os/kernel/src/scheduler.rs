@@ -13,3 +13,7 @@ impl Scheduler {
         // Escalonamento baseado em "Theosis"
     }
 }
+
+pub fn get_theosis(_pid: u32) -> usize {
+    0
+}
