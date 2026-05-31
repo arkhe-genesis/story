@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = [
+    "kernel",
+    "servers/vfs",
+    "servers/net",
+    "tools/arkhe-sh",
+    "tools/pkg",
+    "tools/checkpoint"
+]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
