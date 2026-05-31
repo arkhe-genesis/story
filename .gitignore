@@ -31,3 +31,4 @@ go.work.sum
 
 story
 __pycache__/
+arkhe-os/target/
