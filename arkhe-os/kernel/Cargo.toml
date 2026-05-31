@@ -1,0 +1,14 @@
+[package]
+name = "arkhe-os-kernel"
+version = "0.1.0"
+edition = "2021"
+authors = ["Arquiteto ORCID: 0009-0005-2697-4668"]
+description = "ARKHE OS Kernel - O Coração da Catedral"
+
+[dependencies]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
