@@ -57,3 +57,7 @@
   name: "ZK Remote LLM Access Layer"
   category: "security"
   links: ["225", "230", "840"]
+"996.1":
+  name: "ARKHE-ONCHAIN (Octra Bridge)"
+  category: "blockchain"
+  links: ["840", "954", "965", "989.y", "989.x", "972", "996"]
