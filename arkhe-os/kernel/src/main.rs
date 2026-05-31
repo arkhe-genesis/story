@@ -1,12 +1,13 @@
-#![no_std]
-#![no_main]
+#![cfg_attr(not(test), no_std)]
+#![cfg_attr(not(test), no_main)]
 
-mod memory;
-mod scheduler;
-mod syscalls;
-mod ipc;
-mod isolation;
-mod temporal;
+pub mod memory;
+pub mod scheduler;
+pub mod syscalls;
+pub mod ipc;
+pub mod isolation;
+pub mod temporal;
+pub mod axiarchy;
 
 use core::panic::PanicInfo;
 
@@ -24,4 +25,4 @@ fn panic(_info: &PanicInfo) -> ! {
 }
 
 #[cfg(test)]
-fn main() {}
+pub fn main() {}

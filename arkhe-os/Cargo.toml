@@ -5,7 +5,7 @@ members = [
     "servers/vfs",
     "servers/net",
     "tools/arkhe-sh",
-    "tools/pkg",
+    "servers/package",
     "tools/checkpoint"
 ]
 
