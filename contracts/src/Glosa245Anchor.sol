@@ -27,7 +27,7 @@ contract Glosa245Anchor {
     function anchorSequence(string calldata sequence, bytes32 expectedHash) external onlyArchitect {
         require(canonicalSequenceHash == bytes32(0), unicode"Sequência já ancorada");
         bytes32 hash = keccak256(abi.encodePacked(sequence));
-        require(hash == expectedHash, "Hash não confere");
+        require(hash == expectedHash, unicode"Hash não confere");
         canonicalSequenceHash = hash;
         emit SequenceAnchored(hash, sequence);
     }
