@@ -1,10 +1,6 @@
 help:  ## Display this help message
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-30s\033[0m %s\n", $$1, $$2}'
 
-###############################################################################
-###                                Build                                    ###
-###############################################################################
-
 .PHONY: build
 build: mod ## Build the story client.
 	@mkdir -p build/
@@ -14,17 +10,9 @@ build: mod ## Build the story client.
 mod: ## Update all go.mod files.
 	@go mod tidy
 
-###############################################################################
-###                                Contracts                                 ###
-###############################################################################
-
 .PHONY: contracts-bindings
 contract-bindings: ## Generate golang contract bindings.
 	make -C ./contracts bindings
-
-###############################################################################
-###                                Utils                                 	###
-###############################################################################
 
 .PHONY: ensure-detect-secrets
 ensure-detect-secrets: ## Checks if detect-secrets is installed.
@@ -59,6 +47,39 @@ fix-golden: ## Fixes golden test fixtures.
 mockgen: ## Generates mock files.
 	@cd scripts && bash mockgen.sh
 
-###############################################################################
-###                                Testing                                 	###
-###############################################################################
+MPP_TEST_SUITE := test_suite.py
+WORMGRAPH := wormgraph.py
+OPTION_INDEX_BRIDGE := option_index_bridge.py
+LATTICE_CRYPTO := lattice_crypto.py
+MESH_PASSPORT := mesh_passport.py
+COGNITIVE_OPS := cognitive_operators.py
+ORCHESTRATOR := orchestrator.py
+TEST_SUITE := test_suite.py
+
+.PHONY: test-mpp
+test-mpp:
+	@echo "[MAKE] Testando Substrato 989.z — MPP-CATHEDRAL GATEWAY v3..."
+	python3 -m pytest $(MPP_TEST_SUITE) -v
+	@echo "[MAKE] Substrato 989.z: PASS"
+
+.PHONY: test-lattice
+test-lattice:
+	@echo "[MAKE] Testando Substratos Lattice-Based..."
+	python3 -m pytest $(TEST_SUITE) -v
+	@echo "[MAKE] Substratos Lattice-Based: PASS"
+
+.PHONY: test-wormgraph
+test-wormgraph:
+	@echo "[MAKE] Testando WormGraph Inference Engine v2.0..."
+	python3 $(WORMGRAPH)
+	@echo "[MAKE] WormGraph: PASS"
+
+.PHONY: test-option-index-bridge
+test-option-index-bridge:
+	@echo "[MAKE] Testando Option-Index-Bridge..."
+	python3 $(OPTION_INDEX_BRIDGE)
+	@echo "[MAKE] Option-Index-Bridge: PASS"
+
+.PHONY: test
+test: test-lattice test-mpp test-wormgraph test-option-index-bridge
+	@echo "All tests passed."
