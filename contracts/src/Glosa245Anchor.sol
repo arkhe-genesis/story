@@ -25,9 +25,9 @@ contract Glosa245Anchor {
     /// @param sequence A string binária de 36 bits (ex.: "110000010010100011001111101101011100")
     /// @param expectedHash O SHA‑256 da sequência (como verificação off‑chain).
     function anchorSequence(string calldata sequence, bytes32 expectedHash) external onlyArchitect {
-        require(canonicalSequenceHash == bytes32(0), "Sequência já ancorada");
+        require(canonicalSequenceHash == bytes32(0), unicode"Sequência já ancorada");
         bytes32 hash = keccak256(abi.encodePacked(sequence));
-        require(hash == expectedHash, "Hash não confere");
+        require(hash == expectedHash, unicode"Hash não confere");
         canonicalSequenceHash = hash;
         emit SequenceAnchored(hash, sequence);
     }

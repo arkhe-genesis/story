@@ -56,7 +56,7 @@ func (r *BridgeRelay) SendFheCompute(req *FheComputeRequest, circleID string) (*
 	r.sequence++
 	payload, err := json.Marshal(req)
 	if err != nil {
-		return nil, fmt.Errorf("marshal request: %w", err)
+		return nil, fmt.Errorf("marshal request: %v", err)
 	}
 	packet := &BridgePacket{
 		Sequence:      r.sequence,
@@ -100,14 +100,14 @@ func (r *BridgeRelay) RelayToArkhe(octraResult []byte, originalSeq uint64) (*Bri
 }
 
 func (r *BridgeRelay) VerifyPacket(packet *BridgePacket) error {
-	if packet.Proof == nil || len(packet.Proof) == 0 {
+	if len(packet.Proof) == 0 {
 		return fmt.Errorf("missing Merkle proof")
 	}
 	if !r.verifyMerkleProof(packet.Proof, packet.Payload) {
 		return fmt.Errorf("invalid Merkle proof")
 	}
 	if packet.OperationType == "fhe_compute" || packet.OperationType == "fhe_result" {
-		if packet.ZkProof == nil || len(packet.ZkProof) == 0 {
+		if len(packet.ZkProof) == 0 {
 			return fmt.Errorf("missing ZK proof for FHE operation")
 		}
 		if !r.verifyZkProof(packet.ZkProof, packet.Payload) {
