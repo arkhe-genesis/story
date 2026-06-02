@@ -11,4 +11,3 @@ name = "arkhe_os_kernel"
 path = "src/lib.rs"
 
 [dependencies]
-
