@@ -1,0 +1,9 @@
+target/
+*.o
+*.ko
+*.mod.c
+*.mod
+.*.cmd
+modules.order
+Module.symvers
+catedral_fs.mod*
