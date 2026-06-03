@@ -19,6 +19,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from arkhe.hermes_cathedral_bridge import HermesCathedralBridge
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("ArkheOS")
 
@@ -478,6 +480,7 @@ class ArkheConfig:
     google_max_results: int = 3
     orkut_enabled: bool = True
     protocol257_enabled: bool = True
+    hermes_enabled: bool = True
 
 class ArkheAgent:
     def __init__(self, config: ArkheConfig = ArkheConfig()):
@@ -491,6 +494,13 @@ class ArkheAgent:
         self.llm = MockLLM()
 
         self.world_model = ArkheWorldModel(state_dim=256, action_dim=64, maturity=config.maturity)
+
+        if config.hermes_enabled:
+            self.hermes_bridge = HermesCathedralBridge()
+            logger.info("HermesCathedralBridge initialized. Syncing to Cathedral...")
+            self.hermes_bridge.sync_to_cathedral()
+        else:
+            self.hermes_bridge = None
 
         self.octra = OctraService()
         self.octra.provision_fhe(config.fhe_key_id)

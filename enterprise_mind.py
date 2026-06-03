@@ -19,6 +19,7 @@ import torch.nn as nn
 import numpy as np
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
+from arkhe.hermes_cathedral_bridge import HermesCathedralBridge
 from datetime import datetime
 import json
 import hashlib
@@ -327,6 +328,24 @@ class EnterpriseDeploymentManager:
                     dkes_model, self.nodes[nid]['sensors']
                 )
                 print(f"  [DEPLOY] DKES_NTT em {nid}")
+
+
+    def sync_with_hermes(self, bridge: HermesCathedralBridge):
+        """Sincroniza nós com os subagentes ativos do Hermes."""
+        sensors = bridge.enterprise_sensors
+        for sensor in sensors:
+            nid = sensor["sensor_id"]
+            if nid not in self.nodes:
+                self.nodes[nid] = {
+                    'status': 'active',
+                    'dkes': None,
+                    'sensors': EnterpriseSensorNetwork(num_nodes=1),
+                    'orchestrator': None,
+                    'mpp': MPPIntegration(nid, f"wallet_{nid}")
+                }
+                print(f"  [SYNC] Subagent do Hermes sincronizado como nó: {nid}")
+            else:
+                print(f"  [SYNC] Nó já existente para o subagent: {nid}")
 
     def global_anomaly_scan(self) -> List[AnomalyAlert]:
         """Executa scan de anomalia em todos os nós ativos."""
