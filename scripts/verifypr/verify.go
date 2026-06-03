@@ -14,9 +14,9 @@ import (
 )
 
 var (
-	optionalLink       = `(fix\w*\s|close\w*\s|resolve\w*\s)?`    // Optional issue linking prefix, see https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue.
-	descRegex          = regexp.MustCompile(`^[a-z0-9 .&/-]+$`)   // e.g. "add foo-bar"
-	scopeRegex         = regexp.MustCompile(`^[*\w]+(/[*\w]+)?$`) // e.g. "*" or "foo" or "foo/bar"
+	optionalLink       = `(fix\w*\s|close\w*\s|resolve\w*\s)?`     // Optional issue linking prefix, see https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue.
+	descRegex          = regexp.MustCompile(`^[a-zA-Z0-9 .&/-]+$`) // e.g. "add foo-bar"
+	scopeRegex         = regexp.MustCompile(`^[*\w]+(/[*\w]+)?$`)  // e.g. "*" or "foo" or "foo/bar"
 	issueRegexFull     = regexp.MustCompile(`^` + optionalLink + `https://github\\.com/piplabs/story/issues/\\d+$`)
 	issueRegexShort    = regexp.MustCompile(`^` + optionalLink + `#\d+$`)                       // e.g. "#1334"
 	issueRegexCrossRef = regexp.MustCompile(`^` + optionalLink + `piplabs\/[a-zA-Z0-9-]+#\d+$`) // e.g. "piplabs/story-geth#1559"
@@ -76,6 +76,11 @@ func prFromEnv() (PR, error) {
 func verify(commitMsg string) error {
 	// Fix line endings, since conventional commit parser doesn't support CRLF.
 	commitMsg = strings.ReplaceAll(commitMsg, "\r\n", "\n")
+
+	// Strip out PR footer added by Jules.
+	if julesIndex := strings.Index(commitMsg, "---"); julesIndex != -1 {
+		commitMsg = commitMsg[:julesIndex]
+	}
 
 	// Parse conventional commit message.
 	m := parser.NewMachine()

@@ -32,3 +32,4 @@ go.work.sum
 story
 __pycache__/
 arkhe-os/target/
+arkhe-substrato-1028-coreutils/target/
