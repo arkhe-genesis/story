@@ -223,6 +223,34 @@ class CathedralAdapter:
         print(f"   Status: OPERACIONAL")
         print(f"   Cross-links ativos: 19 substratos")
 
+    def ask(self, prompt: str):
+        """Consulta o modelo zkAGI/Theosis via Ollama"""
+        if not self.config.initialized:
+            print("❌ Integração não inicializada. Execute: ./rbb-cli cathedral init")
+            return
+
+        print(f" \n🏛️  Catedral zkAGI Oracle")
+        print("=" * 60)
+        print(f"Pergunta: {prompt}")
+        print("-" * 60)
+        print("Pensando...")
+
+        try:
+            result = subprocess.run(
+                ["ollama", "run", "rbb-cathedral", prompt],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            print("\nResposta:")
+            print(result.stdout)
+        except FileNotFoundError:
+            print("❌ Ollama não encontrado. O modelo precisa estar em execução no host.")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Erro ao consultar o modelo:\n{e.stderr}")
+
+        print("=" * 60)
+
     def status(self):
         """Exibe status completo da integração"""
         print(" \n🏛️  RBB-CATHEDRAL-BRIDGE - Status")
@@ -323,6 +351,10 @@ def main():
     perm_parser.add_argument("--account", help="Endereço Ethereum")
     perm_parser.add_argument("--role", default="ADMIN", help="Role da conta")
 
+    # ask
+    ask_parser = subparsers.add_parser("ask", help="Faz uma pergunta ao zkAGI Oracle")
+    ask_parser.add_argument("prompt", help="Pergunta sobre Theosis, anchors ou governança")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -341,6 +373,8 @@ def main():
         adapter.sync()
     elif args.command == "status":
         adapter.status()
+    elif args.command == "ask":
+        adapter.ask(args.prompt)
     elif args.command == "permissionamento":
         adapter.permissionamento(
             args.action,
