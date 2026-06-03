@@ -61,3 +61,8 @@
   name: "ARKHE-ONCHAIN (Octra Bridge)"
   category: "blockchain"
   links: ["840", "954", "965", "989.y", "989.x", "972", "996"]
+
+"1040":
+  name: "HERMES-CATHEDRAL BRIDGE"
+  category: "bridge"
+  links: ["989.y.5", "968", "972", "923", "970", "989.y.6.1"]
