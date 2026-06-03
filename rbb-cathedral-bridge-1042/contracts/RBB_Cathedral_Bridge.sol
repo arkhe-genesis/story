@@ -9,6 +9,11 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "./RBB_Cathedral_Token.sol";
+
+interface IPlonkVerifier {
+    function verifyProof(bytes memory proof, uint[] memory pubSignals) external view returns (bool);
+}
 
 /**
  * @title RBB Cathedral Bridge
@@ -76,6 +81,10 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
     uint256 public anchorInterval = 300; // ~20 minutos (300 blocos @ 4s)
     uint256 public minTheosisLevel = 100; // Threshold mínimo
     uint256 public bridgeFee = 0.001 ether;
+    address public plonkVerifier;
+
+    // Token
+    RBB_Cathedral_Token public theosisToken;
 
     // Events
     event AnchorCreated(
@@ -120,7 +129,9 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
     );
 
     // ============ CONSTRUCTOR ============
-    constructor(address _admin) {
+    constructor(address _admin, address _plonkVerifier, address _tokenAddress) {
+        plonkVerifier = _plonkVerifier;
+        theosisToken = RBB_Cathedral_Token(_tokenAddress);
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
         _grantRole(BRIDGE_OPERATOR, _admin);
         _grantRole(TEMPORAL_ANCHOR, _admin);
@@ -200,9 +211,21 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
         bytes calldata _payload,
         uint256 _targetChainId
     ) external payable nonReentrant returns (bytes32) {
-        require(msg.value >= bridgeFee, "Bridge: fee insuficiente");
-        require(_targetChainId == CATHEDRAL_CHAIN_ID, "Bridge: chain inválida");
+        // Fee becomes dynamic based on current Theosis level
+        uint256 currentTheosis = theosisHistory[theosisEpoch].level;
+        uint256 dynamicFee = bridgeFee;
+
+        // Se Theosis for baixo, fee é maior. Se for alto (>= minTheosisLevel), fee é base.
+        if (currentTheosis < minTheosisLevel && currentTheosis > 0) {
+            dynamicFee = bridgeFee + ((minTheosisLevel - currentTheosis) * 1e14); // taxa extra
+        }
+
+        require(msg.value >= dynamicFee, "Bridge: fee insuficiente (Theosis)");
+        require(_targetChainId == CATHEDRAL_CHAIN_ID, "Bridge: chain invalida");
         require(_amount > 0, "Bridge: amount deve ser > 0");
+
+        // The token needs to be transferred to the bridge
+        require(theosisToken.transferFrom(msg.sender, address(this), _amount), "Bridge: falha ao transferir token");
 
         bytes32 messageId = keccak256(abi.encodePacked(
             msg.sender,
@@ -245,7 +268,8 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
         uint256 _amount,
         bytes calldata _payload,
         uint256 _sourceChainId,
-        bytes calldata _signature
+        bytes calldata _signature,
+        bytes calldata _zkProof
     ) external onlyRole(BRIDGE_OPERATOR) nonReentrant {
         require(!processedMessages[_messageId], "Bridge: mensagem já processada");
         require(_sourceChainId == CATHEDRAL_CHAIN_ID, "Bridge: source inválida");
@@ -263,8 +287,15 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
         address signer = ethSignedHash.recover(_signature);
         require(hasRole(BRIDGE_OPERATOR, signer), "Bridge: assinatura inválida");
 
-        // Mint tokens (simplificado - em produção usar contract de token)
+        // Validar Theosis ZK Proof via PLONK
+        if (_zkProof.length > 0 && plonkVerifier != address(0)) {
+            uint[] memory pubSignals = new uint[](0);
+            require(IPlonkVerifier(plonkVerifier).verifyProof(_zkProof, pubSignals), "Bridge: Theosis ZK proof invalida");
+        }
+
+        // Mint tokens reias Theosis (via ERC-20 real)
         mintedBalances[_recipient] += _amount;
+        theosisToken.mint(_recipient, _amount);
         processedMessages[_messageId] = true;
 
         emit MessageExecuted(_messageId, msg.sender, true);
@@ -332,6 +363,10 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
 
     function setMinTheosisLevel(uint256 _level) external onlyRole(DEFAULT_ADMIN_ROLE) {
         minTheosisLevel = _level;
+    }
+
+    function setPlonkVerifier(address _verifier) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        plonkVerifier = _verifier;
     }
 
     function withdrawFees() external onlyRole(DEFAULT_ADMIN_ROLE) {
