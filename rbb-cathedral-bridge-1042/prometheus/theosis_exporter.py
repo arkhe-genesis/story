@@ -135,18 +135,35 @@ class TheosisCollector:
 
     def _update_theosis(self):
         """Atualiza métricas de Theosis"""
-        # Em produção, consultaria contrato Bridge ou API Catedral
-        # Simulação baseada em funções determinísticas
         now = time.time()
         seed = int(now / self.update_interval)
 
-        import random
-        random.seed(seed)
+        try:
+            # Conecta diretamente ao runtime do WormGraph 5.0 / zkAGI
+            req = urllib.request.Request("http://localhost:8000/metrics")
+            with urllib.request.urlopen(req, timeout=5) as response:
+                lines = response.read().decode('utf-8').split('\n')
+                for line in lines:
+                    if line.startswith('wg51_theosis '):
+                        self.theosis.level = float(line.split(' ')[1])
+                    elif line.startswith('wg51_entropy '):
+                        self.theosis.entropy = float(line.split(' ')[1])
 
-        self.theosis.level = round(0.3 + random.random() * 0.4, 4)
-        self.theosis.entropy = round(0.4 + random.random() * 0.3, 4)
-        self.theosis.circularity = round(random.random() * 0.02, 6)
-        self.theosis.resilience = round(0.85 + random.random() * 0.15, 4)
+                import random
+                random.seed(seed)
+                self.theosis.circularity = round(random.random() * 0.02, 6)
+                self.theosis.resilience = round(0.85 + random.random() * 0.15, 4)
+
+        except Exception as e:
+            print(f"Failed to fetch real Theosis metrics, falling back to simulation: {e}")
+            import random
+            random.seed(seed)
+
+            self.theosis.level = round(0.3 + random.random() * 0.4, 4)
+            self.theosis.entropy = round(0.4 + random.random() * 0.3, 4)
+            self.theosis.circularity = round(random.random() * 0.02, 6)
+            self.theosis.resilience = round(0.85 + random.random() * 0.15, 4)
+
         self.theosis.timestamp = now
         self.theosis.epoch = seed
 
