@@ -66,3 +66,7 @@
   name: "HERMES-CATHEDRAL BRIDGE"
   category: "bridge"
   links: ["989.y.5", "968", "972", "923", "970", "989.y.6.1"]
+"1047":
+  name: "TWIN_WALLET"
+  category: "Identidade Descentralizada / Infraestrutura de Pagamento por Identidade"
+  links: ["923", "954", "989.x", "972", "1039", "1042.4", "1016"]
