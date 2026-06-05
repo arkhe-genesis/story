@@ -33,6 +33,8 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # First, install the dependencies
       - run: pnpm install
