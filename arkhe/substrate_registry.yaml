@@ -70,3 +70,7 @@
   name: "TWIN_WALLET"
   category: "Identidade Descentralizada / Infraestrutura de Pagamento por Identidade"
   links: ["923", "954", "989.x", "972", "1039", "1042.4", "1016"]
+"1066":
+  name: "FORDEFI-CATHEDRAL-BRIDGE"
+  category: "interface"
+  links: ["1042.4", "954", "989.z.4"]
