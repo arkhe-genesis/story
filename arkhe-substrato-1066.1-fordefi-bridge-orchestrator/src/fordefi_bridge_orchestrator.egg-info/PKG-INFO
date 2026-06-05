@@ -1,0 +1,27 @@
+Metadata-Version: 2.4
+Name: fordefi-bridge-orchestrator
+Version: 1.0.0
+Summary: Substrato 1066.1 — Fordefi Bridge Orchestrator (ARKHE)
+Author: Arquiteto ORCID 0009-0005-2697-4668
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Security :: Cryptography
+Requires-Python: >=3.11
+License-File: LICENSE
+Requires-Dist: requests>=2.31.0
+Requires-Dist: pydantic>=2.0
+Requires-Dist: cryptography>=42.0
+Requires-Dist: web3>=6.0
+Requires-Dist: eth-account>=0.11
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: rich>=13.0.0
+Requires-Dist: textual>=0.50.0
+Requires-Dist: click>=8.1.0
+Dynamic: author
+Dynamic: classifier
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

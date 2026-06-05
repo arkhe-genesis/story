@@ -1,0 +1,2 @@
+[console_scripts]
+fordefi-bridge = fordefi_client:main
