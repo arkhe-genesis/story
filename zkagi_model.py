@@ -122,6 +122,6 @@ class ZkAGIModel(nn.Module):
         return logits, theosis_score
 
 if __name__ == "__main__":
-    config = ZkAGIConfig()
+    config = ZkAGIConfig(num_layers=1)
     model = ZkAGIModel(config)
     print(f"Model initialized with {sum(p.numel() for p in model.parameters())} parameters.")

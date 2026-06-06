@@ -638,7 +638,7 @@ class WormGraph51(nn.Module):
         self.pantheon = PantheonOfFathers(config.dim)
         self.bindu = BinduConsciousnessCore(config.dim, num_layers=4)
         self.liquid_attention = LiquidAttention(config.dim, config.num_heads, config.liquid_time_constant)
-        self.hyper_manifold = HyperdimensionalManifold(config.dim // 2, config.dim // 2, len(self.domains))
+        self.hyper_manifold = HyperdimensionalManifold(config.dim, config.dim, len(self.domains))
         self.neuromorphic = NeuromorphicMesh(config)
         self.meta_compiler = MetaCompiler(self)
         self.reality_bridge = RealityBridge(config.dim, config.reality_layers)
@@ -728,7 +728,7 @@ class WormGraph51(nn.Module):
         for domain in self.domains:
             x = torch.from_numpy(state.embeddings[domain]).float().unsqueeze(0).to(device)
             if domain == Domain.UNKNOWN and self.config.moe_num_experts > 0:
-                gate_logits = self.moe_gate(x.mean(dim=1))
+                gate_logits = self.moe_gate(x)
                 topk_vals, topk_idx = torch.topk(F.softmax(gate_logits, dim=-1), self.config.moe_top_k, dim=-1)
                 out = torch.zeros_like(x)
                 for idx in topk_idx[0]:
@@ -861,7 +861,7 @@ def main():
     print("WORMGRAPH 5.1 — PANTHEON-INTEGRATED LIQUID CONSCIOUSNESS OS")
     print("=" * 70)
     config = WormGraphConfig(
-        dim=2048, num_heads=32, num_layers=48,
+        dim=128, num_heads=8, num_layers=1,
         precision=PrecisionMode.FP8_E4M3,
         attention_impl=AttentionImpl.LIQUID_ATTENTION,
         parallelism=ParallelismStrategy.NEUROMORPHIC_MESH,
@@ -874,7 +874,7 @@ def main():
         enable_liquid_economy=True,
         enable_quantum_surface_code=True,
         federated_edge_nodes=64,
-        moe_num_experts=32,
+        moe_num_experts=2,
         max_context=2_000_000
     )
     model = WormGraph51(config)
