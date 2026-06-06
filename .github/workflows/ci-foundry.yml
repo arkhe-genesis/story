@@ -32,7 +32,7 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly-5b7e4cb3c882b28f37d6e5d2ff1fce454dc7b8c7
+          version: nightly-0a0004944ec7f0d046f1ecbaefb27ecba36b5ec6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
