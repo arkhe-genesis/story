@@ -102,7 +102,7 @@
   name: "MOLTBOOK-IDENTITY-BRIDGE"
   category: "bridge"
   links: ["1046.6", "1072", "1042.2", "954"]
-"1088":
-  name: "COMPLEX NETWORK OPTIMIZATION ENGINE"
+"1089":
+  name: "SINDY-STLS-PATCH"
   category: "bridge"
-  links: ["1083", "1080", "1079", "1042.4"]
+  links: ["825", "826"]
