@@ -98,8 +98,7 @@
   name: "TRANSLATION-ENGINE"
   category: "bridge"
   links: ["1079", "1080", "1081"]
-
-"1086":
-  name: "Drops Database Bridge"
-  category: "data"
-  links: ["1049", "989.y.6.1", "1062", "1046.1", "1064.2", "1042.4", "1062.4", "1042.1", "989.y.6.2", "1046.5", "1046.3", "1053.4"]
+"1084":
+  name: "MOLTBOOK-IDENTITY-BRIDGE"
+  category: "bridge"
+  links: ["1046.6", "1072", "1042.2", "954"]
