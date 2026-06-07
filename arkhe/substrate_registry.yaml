@@ -102,3 +102,7 @@
   name: "MOLTBOOK-IDENTITY-BRIDGE"
   category: "bridge"
   links: ["1046.6", "1072", "1042.2", "954"]
+"1089":
+  name: "SINDY-STLS-PATCH"
+  category: "bridge"
+  links: ["825", "826"]
