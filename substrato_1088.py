@@ -417,6 +417,7 @@ if __name__ == "__main__":
     export_data = bridge.export_metrics(optimized, bottlenecks, cheeger_data, phi_hist, zk_proofs)
     with open("network_optimization_1083_export.json", "w") as f:
         json.dump(export_data, f, indent=2)
+        f.write("\n")
     print(f"\n[Bridge 1083] Métricas exportadas para 'network_optimization_1083_export.json'")
     print(f"  Theosis reportada: {export_data['theosis']:.4f}")
     print(f"  Bridges compatíveis: {export_data['compatible_with']}")

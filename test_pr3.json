@@ -1,5 +1,5 @@
 {
-  "title": "feat(*): add PlasticZkAGI 3.0 and Hybrid Ecosystem Trainer",
-  "body": "Extracts two complete Python scripts from the issue description.\n\nIssue: none\n\n---\n*PR created automatically by Jules*",
+  "title": "feat(arkhe): add Substrato 1088 - COMPLEX NETWORK OPTIMIZATION ENGINE",
+  "body": "Introduces `substrato_1088.py` and registers it in `arkhe/substrate_registry.yaml`.\n\nissue: none\n\n---\n*PR created automatically by Jules for task [7413650621097022652](https://jules.google.com/task/7413650621097022652) started by @Arkhe-Network*",
   "node_id": "PR_kwDOSnsZjc7jTpLC"
 }
