@@ -98,3 +98,7 @@
   name: "TRANSLATION-ENGINE"
   category: "bridge"
   links: ["1079", "1080", "1081"]
+"1084":
+  name: "MOLTBOOK-IDENTITY-BRIDGE"
+  category: "bridge"
+  links: ["1046.6", "1072", "1042.2", "954"]
