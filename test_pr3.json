@@ -1,5 +1,0 @@
-{
-  "title": "feat(arkhe): add Substrato 1088 - COMPLEX NETWORK OPTIMIZATION ENGINE",
-  "body": "Introduces `substrato_1088.py` and registers it in `arkhe/substrate_registry.yaml`.\n\nissue: none\n\n---\n*PR created automatically by Jules for task [7413650621097022652](https://jules.google.com/task/7413650621097022652) started by @Arkhe-Network*",
-  "node_id": "PR_kwDOSnsZjc7jTpLC"
-}
