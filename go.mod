@@ -2,8 +2,6 @@ module github.com/piplabs/story
 
 go 1.24.0
 
-toolchain go1.24.3
-
 require (
 	cosmossdk.io/api v0.7.6
 	// NOTE(https://github.com/cosmos/rosetta/issues/76): Rosetta requires cosmossdk.io/core v0.12.0 erroneously but
