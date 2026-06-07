@@ -1,0 +1,65 @@
+{
+  "substrate": "1088",
+  "version": "1.1.0",
+  "timestamp": "2026-06-07T17:14:21.262315+00:00",
+  "graph": {
+    "nodes": 10,
+    "edges": 44,
+    "density": 0.9777777777777777,
+    "avg_degree": 6.644606187851217
+  },
+  "bottlenecks": [
+    {
+      "node": "sub_4",
+      "betweenness": 0.555556
+    },
+    {
+      "node": "sub_5",
+      "betweenness": 0.555556
+    },
+    {
+      "node": "sub_0",
+      "betweenness": 0.0
+    },
+    {
+      "node": "sub_1",
+      "betweenness": 0.0
+    },
+    {
+      "node": "sub_2",
+      "betweenness": 0.0
+    }
+  ],
+  "cheeger": {
+    "lambda2": 0.010476,
+    "phi": 0.005445,
+    "inequality_holds": true
+  },
+  "optimization": {
+    "initial_phi": 0.005444718088709746,
+    "final_phi": 0.721631588135199,
+    "improvement_pct": 13153.791589900418,
+    "generations": 20
+  },
+  "theosis": 1.0,
+  "zk_proofs_generated": 20,
+  "last_zk_proof": {
+    "generation": 19,
+    "lambda2": 0.8235144121601183,
+    "phi": 0.721631588135199,
+    "cheeger_holds": true,
+    "proof_hash": "3c9398030f3e16e7248033f5a10a0bfc",
+    "circuit": "cheeger_inequality.circom",
+    "proof_system": "Groth16 (BN254)",
+    "verified": true,
+    "timestamp": "2026-06-07T17:14:21.158119+00:00"
+  },
+  "bridge_type": "network_optimization",
+  "compatible_with": [
+    "1083",
+    "1080",
+    "1079",
+    "1042.4"
+  ],
+  "seal": "NETWORK-BRIDGE-1088-5d2984aa4a987bd5"
+}
