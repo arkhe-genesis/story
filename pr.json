@@ -1,1 +1,5 @@
-{"title": "feat(bridge): add substrato 1093", "body": "Implemented Substrato 1093. \n\nissue: none", "node_id": "test"}
+{
+  "title": "feat(bridge): add substrato 1093",
+  "body": "issue: none",
+  "node_id": "test"
+}
