@@ -1,14 +1,4 @@
-// File: arkhe-cli/src/commands/octra.rs
-
-use clap::{Parser, Subcommand};
-
-#[derive(Parser)]
-#[command(name = "arkhe octra")]
-#[command(about = "ARKHE OS Octra FHE Bridge commands")]
-pub struct OctraCli {
-    #[command(subcommand)]
-    command: OctraCommands,
-}
+use clap::Subcommand;
 
 #[derive(Subcommand)]
 pub enum OctraCommands {
@@ -49,9 +39,9 @@ pub enum OctraCommands {
     Pending,
 }
 
-impl OctraCli {
+impl OctraCommands {
     pub async fn execute(&self) -> Result<(), Box<dyn std::error::Error>> {
-        match &self.command {
+        match self {
             OctraCommands::Status => {
                 println!("═══ 840-OCTRA-FHE-BRIDGE STATUS ═══");
                 println!("  Φ_C:           0.835000");
